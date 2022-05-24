@@ -9,8 +9,10 @@ namespace Shopping.Data
         {
         }
 
-        public DbSet<Country> Countries { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<State> States { get; set; }
 
         // Este se coloca para que no se ingrese dos veces el nombre del Pais(Tabla Countries - Campo Country
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -18,6 +20,12 @@ namespace Shopping.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Country>().HasIndex(c => c.Name).IsUnique();
             modelBuilder.Entity<Category>().HasIndex(c => c.Name).IsUnique();
+
+            // Indice Compuesto
+
+            modelBuilder.Entity<State>().HasIndex("Name","CountryId").IsUnique();
+            modelBuilder.Entity<City>().HasIndex("Name", "StateId").IsUnique();
+
         }
     }
 }
